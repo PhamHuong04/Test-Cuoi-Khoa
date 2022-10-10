@@ -40,4 +40,38 @@ export class UserService {
     createUserDto.password = this.helper.encodePassword(createUserDto.password);
     return this.userRepository.save(createUserDto);
   }
+
+  async findAll() {
+    const users = await this.userRepository.findAndCount({});
+    if (!users) {
+      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
+    }
+    return users;
+  }
+
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
+    }
+    return user;
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
+    }
+    await this.userRepository.update({ id }, updateUserDto);
+    return `update successfully`;
+  }
+
+  async remove(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
+    }
+    await this.userRepository.delete(id);
+    return `delete successfully`;
+  }
 }

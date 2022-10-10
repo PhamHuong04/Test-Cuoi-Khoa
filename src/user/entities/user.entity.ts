@@ -9,7 +9,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
 export enum UserRole {
+  ADMIN = 'admin',
   CUSTOMER = 'customer',
   SELLER = 'seller',
 }
@@ -28,7 +30,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.SELLER,
+    default: UserRole.CUSTOMER,
   })
   roles: UserRole;
 

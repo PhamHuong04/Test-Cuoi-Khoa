@@ -13,6 +13,7 @@ import { TypeOrmConfigSerivce } from './common/share/typeorm/typeorm.service';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { AuthModule } from './auth/auth.module';
+import { AbilityModule } from './ability/ability.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot(configEnvPath),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigSerivce }),
     AuthModule,
+    AbilityModule,
   ],
   controllers: [AppController],
   providers: [
