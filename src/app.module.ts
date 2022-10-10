@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,7 +11,6 @@ import { UserModule } from './user/user.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { configEnvPath } from './common/helper/env.hepler';
 import { TypeOrmConfigSerivce } from './common/share/typeorm/typeorm.service';
-import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { AuthModule } from './auth/auth.module';
 import { AbilityModule } from './ability/ability.module';
@@ -32,6 +32,10 @@ import { AbilityModule } from './ability/ability.module';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
     },
   ],
 })

@@ -5,9 +5,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   name: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  quanlity: string;
+  quantity: number;
 
   @IsNumber()
   @IsNotEmpty()
