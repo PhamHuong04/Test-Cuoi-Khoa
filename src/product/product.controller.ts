@@ -20,11 +20,11 @@ import { Product } from './entities/product.entity';
 
 @Controller('product')
 @UseGuards(AuthGuard('jwt'), AbilitiesGuard)
-@CheckAbilities({ action: Action.MANAGE_PRODUCT, subject: Product })
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @CheckAbilities({ action: Action.MANAGE_PRODUCT, subject: Product })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }
@@ -40,11 +40,13 @@ export class ProductController {
   }
 
   @Patch(':id')
+  @CheckAbilities({ action: Action.MANAGE_PRODUCT, subject: Product })
   update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
+  @CheckAbilities({ action: Action.MANAGE_PRODUCT, subject: Product })
   remove(@Param('id') id: number) {
     return this.productService.remove(+id);
   }

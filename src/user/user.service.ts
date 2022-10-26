@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -6,6 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartService } from 'src/cart/cart.service';
+import { Cart } from 'src/cart/entities/cart.entity';
 import { Repository } from 'typeorm';
 import { AuthHelper } from './auth.helper';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,6 +23,9 @@ export class UserService {
 
     @Inject(AuthHelper)
     private readonly helper: AuthHelper,
+
+    @Inject(forwardRef(() => CartService))
+    private cartService: CartService,
   ) {}
 
   private logger = new Logger('UserService');
@@ -34,19 +40,17 @@ export class UserService {
         HttpStatus.CONFLICT,
       );
     }
-    this.logger.verbose(
-      `New user in system with email is: ${createUserDto.email.toLowerCase()}`,
-    );
+
     createUserDto.password = this.helper.encodePassword(createUserDto.password);
+
+    const cart = new Cart();
+    this.cartService.createWithoutDto(cart);
+    createUserDto.cart = cart;
     return this.userRepository.save(createUserDto);
   }
 
-  async findAll() {
-    const users = await this.userRepository.findAndCount({});
-    if (!users) {
-      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
-    }
-    return users;
+  findAll() {
+    return this.userRepository.findAndCount({});
   }
 
   async findOne(id: number) {

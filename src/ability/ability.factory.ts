@@ -29,7 +29,6 @@ export class AbilityFactory {
       Ability as AbilityClass<AppAbility>,
     );
 
-    console.log(user.roles);
     if (user.roles == 'admin') {
       can(Action.MANAGE_PRODUCT, Product);
       can(Action.MANAGE_USER, UserEntity);
@@ -37,11 +36,9 @@ export class AbilityFactory {
       cannot(Action.MANAGE_USER, UserEntity).because(
         'You are not authorized to do this',
       );
-      cannot(Action.MANAGE_PRODUCT, Product).because(
-        'You are not authorized to do this',
-      );
+      can(Action.MANAGE_PRODUCT, Product);
     } else {
-      can(Action.READ, UserEntity);
+      can(Action.READ, Product);
     }
 
     return build({
